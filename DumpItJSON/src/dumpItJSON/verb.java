@@ -1,5 +1,7 @@
 package dumpItJSON;
 
+import java.util.ArrayList;
+
 public class verb {
 	public enum sorteOrd {
 		Indicativo, Condicional, Subjuntivo, Imperativo, Gerundio, Participio
@@ -20,7 +22,13 @@ public class verb {
 		yo, tú, él_ella, nosotros_as, vosotros_as, ellos_ellas
 	};
 
-	String[][][] verbMatrix;
+	public String[][][] verbMatrix =  new String[10][10][10];
 	String baseVerb;
+	public verb(String baseVerb) {
+		super();
+		this.baseVerb = baseVerb;
+	}
+	
+	
 
 }
