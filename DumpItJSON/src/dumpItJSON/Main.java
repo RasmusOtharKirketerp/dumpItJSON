@@ -4,8 +4,6 @@ public class Main {
 
 	static verb v1 = new verb("correr");
 
-	
-
 	public static void main(String[] args) throws Exception {
 		URLReader ur = new URLReader();
 		v1.baseVerb = "correr";
@@ -15,7 +13,7 @@ public class Main {
 		// [resultat.tú.ordinal()] = "corres";
 
 		v1.verbMatrix[0][0][0] = "corro";
-		
+
 		ur.run();
 	}
 
