@@ -1,19 +1,16 @@
 package dumpItJSON;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class Main {
 
-	public static ArrayList<String> locateStr(String Str, String splitStr, boolean debug) {
+	public static ArrayList<String> locateStr(String Str, String splitStr) {
 		ArrayList<String> retVar = new ArrayList<String>();
 
 		for (String retval : Str.split(splitStr)) {
-			if (debug)
-				System.out.println(retval);
 			retVar.add(retval);
 		}
-
-		// ystem.out.println("Count : " + retVar.size());
 		return retVar;
 
 	}
@@ -38,7 +35,6 @@ public class Main {
 		cutStart = retVal.indexOf("###");
 		if (cutStart > 0)
 			retVal = retVal.substring(0, cutStart);
-		// System.out.println(retVal);
 
 		retVal.substring(0, retVal.length() - 2);
 		return retVal;
@@ -47,19 +43,16 @@ public class Main {
 
 	public static String KeepOneDiv(String str) {
 		String retVal = str;
-
-		// person">yo</div> <div class="
 		int cutStart = retVal.indexOf("div>");
 		if (cutStart > -1)
-			retVal = retVal.substring(0, cutStart-2);
-		
-		retVal = retVal.replace("person\">", "in:");
-		retVal = retVal.replace("result\">", "out:");
+			retVal = retVal.substring(0, cutStart - 2);
 
-		
+		retVal = retVal.replace("person\">", "lvl3in:");
+		retVal = retVal.replace("result\">", "lvl3out:");
+
 		retVal = retVal.replace("block container result-block", "lvl1:");
 		retVal = retVal.replace("tense-block-header", "lvl2:");
-		
+
 		retVal = retVal.replace("<h3>", "");
 		retVal = retVal.replace("\">", "");
 		retVal = retVal.replace("</h3", "");
@@ -68,32 +61,26 @@ public class Main {
 		retVal = retVal.replace("><\"", "");
 		retVal = retVal.replace(">", "");
 
-		
 		return retVal;
 	}
 
-	public static void cleanStrPerfectDiv(String str) {
-
-		// "> <div class="conj-person">yo</div> <div
-		// class="conj-result">corro</div> </div> <div class="
-
+	public static ArrayList<String> cleanStrPerfectDiv(String str) {
 		ArrayList<String> splitDiv = new ArrayList<String>();
+		ArrayList<String> retVal = new ArrayList<String>();
 
-		splitDiv = locateStr(str, "conj-", false);
+		splitDiv = locateStr(str, "conj-");
 
 		for (String string : splitDiv) {
-			// System.out.println("SplitDiv : " + string);
-			if (string.indexOf("person") > -1 || string.indexOf("result") > -1 || string.indexOf("h3>") > -1)
-			{
-				//System.out.println("keep Line : " + string);
+			if (string.indexOf("person") > -1 || string.indexOf("result") > -1 || string.indexOf("h3>") > -1) {
 				string = KeepOneDiv(string);
-				System.out.println(string);
+				retVal.add(string);
 			}
 		}
 
+		return retVal;
+
 	}
 
-	static verb v1 = new verb("correr");
 
 	public static void main(String[] args) throws Exception {
 		URLReader ur = new URLReader();
@@ -101,21 +88,35 @@ public class Main {
 		ArrayList<String> allebojninger = new ArrayList<String>();
 		ArrayList<String> par = new ArrayList<String>();
 
-		v1.baseVerb = "correr";
+		ArrayList<String> strukturListe = new ArrayList<String>();
+		
+		String word = "correr";
 
-		v1.verbMatrix[0][0][0] = "corro";
+		allebojninger = locateStr(ur.run(word), "conj-item");
 
-		allebojninger = locateStr(ur.run(), "conj-item", false);
-
-		int i = -1;
 		for (String string : allebojninger) {
-			par = locateStr(string, "conj-person\\>", false);
+			par = locateStr(string, "conj-person\\>");
 			for (String stringpar : par) {
-				i++;
-				cleanStrPerfectDiv(stringpar);
+				strukturListe.addAll(cleanStrPerfectDiv(stringpar));
 			}
 
 		}
+
+		for (String string : strukturListe) {
+			System.out.println(string);
+		}
+
+		FileWriter writer = new FileWriter(".\\outputLine_" + word + ".txt");
+
+		writer.write("DumpItJSON : " + word);
+		writer.write("\r\n");
+
+		for (String str : strukturListe) {
+			str = str.toString();
+			writer.write(str);
+			writer.write("\r\n");
+		}
+		writer.close();
 
 	}
 
