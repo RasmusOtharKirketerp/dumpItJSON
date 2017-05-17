@@ -1,7 +1,11 @@
 package dumpItJSON;
 
-import java.io.FileWriter;
 import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+
 
 public class Main {
 
@@ -81,6 +85,21 @@ public class Main {
 
 	}
 
+	public static String cutData(String str) {
+		// lvl3out:hubiste corrido
+		// --------------- << DATA
+		return str.substring(str.indexOf(":") + 1, str.length());
+	}
+
+	@SuppressWarnings("unchecked")
+	public void makeData(String base, ArrayList<String> lines) {
+		for (int i = 0; i < lines.size(); i++) {
+			String string = lines.get(i);
+			System.out.println(string);
+
+		}
+
+	}
 
 	public static void main(String[] args) throws Exception {
 		URLReader ur = new URLReader();
@@ -89,7 +108,7 @@ public class Main {
 		ArrayList<String> par = new ArrayList<String>();
 
 		ArrayList<String> strukturListe = new ArrayList<String>();
-		
+
 		String word = "correr";
 
 		allebojninger = locateStr(ur.run(word), "conj-item");
@@ -102,21 +121,17 @@ public class Main {
 
 		}
 
-		for (String string : strukturListe) {
-			System.out.println(string);
-		}
+		/*
+		 * FileWriter writer = new FileWriter(".\\outputLine_" + word + ".txt");
+		 * 
+		 * writer.write("DumpItJSON : " + word); writer.write("\r\n");
+		 * 
+		 * for (String str : strukturListe) { str = str.toString();
+		 * writer.write(str); writer.write("\r\n"); } writer.close();
+		 */
 
-		FileWriter writer = new FileWriter(".\\outputLine_" + word + ".txt");
-
-		writer.write("DumpItJSON : " + word);
-		writer.write("\r\n");
-
-		for (String str : strukturListe) {
-			str = str.toString();
-			writer.write(str);
-			writer.write("\r\n");
-		}
-		writer.close();
+		// make JSON file
+		//makeJSON(word, strukturListe);
 
 	}
 

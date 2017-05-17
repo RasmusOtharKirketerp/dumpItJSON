@@ -1,7 +1,5 @@
 package dumpItJSON;
 
-import java.util.ArrayList;
-
 public class verb {
 	public enum sorteOrd {
 		Indicativo, Condicional, Subjuntivo, Imperativo, Gerundio, Participio
